@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -79,6 +80,8 @@ namespace WpfApp1
 
         private void orderbutton_Click(object sender, RoutedEventArgs e)
         {
+            //將訂購飲料加入訂單
+            PlaceOrder(orders);
             double total = 0.0;
             double sellPrice = 0.0;
             string displayString = "訂購清單如下:\n";
@@ -114,6 +117,24 @@ namespace WpfApp1
             }
             displayString += $"本次訂購總共{orders.Count}項，{message}，售價{sellPrice}元";
             TextBlock1.Text = displayString;
+        }
+
+        private void PlaceOrder(Dictionary<string, int> myorders)
+        {
+            myorders.Clear();
+            for (int i = 0; i < stackPanel_DrinkMenu.Children.Count; i++)
+            {
+                StackPanel sp = stackPanel_DrinkMenu.Children[i] as StackPanel;
+                CheckBox cb = sp.Children[0] as CheckBox;
+                Slider sl = sp.Children[1] as Slider;
+                string drinkName = cb.Content.ToString().Substring(0,4);
+                int quantity = Convert.ToInt32(sl.Value);
+
+                if (cb.IsChecked == true && quantity != 0)
+                {
+                    myorders.Add(drinkName,quantity);
+                }
+            }
         }
 
         private void RadioButton_Click(object sender, RoutedEventArgs e)
