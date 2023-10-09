@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace WpfApp1
@@ -11,7 +12,8 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         Dictionary<string, int> drinks = new Dictionary<string, int>();
-        Dictionary<string, int> orders = new Dictionary<string, int>(); 
+        Dictionary<string, int> orders = new Dictionary<string, int>();
+        string takeout = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -36,13 +38,15 @@ namespace WpfApp1
                 cb.FontFamily = new FontFamily("Consolas");
                 cb.FontSize = 18;
                 cb.Foreground = Brushes.Blue;
-                cb.Margin = new Thickness(5);
+                cb.Margin = new Thickness(5);//線性移動方塊
 
-                Slider sd = new Slider();
-                sd.Width = 100;
-                sd.Value = 0;
-                sd.Minimum = 0;
-                sd.Maximum = 10;
+                Slider sl = new Slider();
+                sl.Width = 100;
+                sl.Value = 0;
+                sl.Minimum = 0;
+                sl.Maximum = 10;
+                sl.IsSnapToTickEnabled = true;
+
                 Label lb = new Label();
                 lb.Width = 50;
                 lb.Content = "0";
@@ -52,9 +56,13 @@ namespace WpfApp1
 
 
                 sp.Children.Add(cb);
-                sp.Children.Add(sd);
+                sp.Children.Add(sl);
                 sp.Children.Add(lb);
 
+                //資料細節
+                Binding mybinding = new Binding("Value");
+                mybinding.Source = sl;
+                lb.SetBinding(ContentProperty, mybinding);
                 stackPanel_DrinkMenu.Children.Add(sp);
             }
         }
@@ -67,26 +75,6 @@ namespace WpfApp1
             mydrinks.Add("綠茶小杯", 40);
             mydrinks.Add("咖啡大杯", 80);
             mydrinks.Add("咖啡小杯", 50);
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var targetTextBox = sender as TextBox;
-
-            bool success = int.TryParse(targetTextBox.Text, out int amount);
-
-            if (!success) MessageBox.Show("請輸入整數", "輸入錯誤");
-
-            else if (amount <= 0) MessageBox.Show("請輸入正整數", "輸入錯誤");
-
-            else
-            {
-                StackPanel targetStackPanel = targetTextBox.Parent as StackPanel;
-                Label targetLabel = targetStackPanel.Children[0] as Label;
-                string drinkname = targetLabel.Content.ToString();
-                if(orders.ContainsKey(drinkname)) orders.Remove(drinkname);
-                orders.Add(drinkname, amount);
-            }
         }
 
         private void orderbutton_Click(object sender, RoutedEventArgs e)
@@ -126,6 +114,13 @@ namespace WpfApp1
             }
             displayString += $"本次訂購總共{orders.Count}項，{message}，售價{sellPrice}元";
             TextBlock1.Text = displayString;
+        }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            var rb = sender as RadioButton;
+            if (rb.IsChecked == true) takeout = rb.Content.ToString();
+            MessageBox.Show (takeout);
         }
     }
 }
