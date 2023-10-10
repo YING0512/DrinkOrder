@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -70,12 +72,27 @@ namespace WpfApp1
 
         private void AddNewDrink(Dictionary<string, int> mydrinks)
         {
-            mydrinks.Add("紅茶大杯", 60);
-            mydrinks.Add("紅茶小杯", 40);
-            mydrinks.Add("綠茶大杯", 60);
-            mydrinks.Add("綠茶小杯", 40);
-            mydrinks.Add("咖啡大杯", 80);
-            mydrinks.Add("咖啡小杯", 50);
+            //mydrinks.Add("紅茶大杯", 60);
+            //mydrinks.Add("紅茶小杯", 40);
+            //mydrinks.Add("綠茶大杯", 60);
+            //mydrinks.Add("綠茶小杯", 40);
+            //mydrinks.Add("咖啡大杯", 80);
+            //mydrinks.Add("咖啡小杯", 50);
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "CSV檔案|*.csv|文字檔案|*.txt|全部檔案|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filename = openFileDialog.FileName;
+                string[] lines = File.ReadAllLines(filename);
+                foreach (var line in lines)
+                {
+                    string[] tokens = line.Split(',');
+                    string drinkName = tokens[0];
+                    int price = Convert.ToInt32(tokens[1]);
+                    mydrinks.Add(drinkName, price);
+                }
+            }
         }
 
         private void orderbutton_Click(object sender, RoutedEventArgs e)
