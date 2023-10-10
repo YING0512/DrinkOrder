@@ -9,7 +9,7 @@
     <Grid HorizontalAlignment="Left" Width="800">
         <StackPanel x:Name="stackPanel_DrinkMenu" Margin="40,84,200,0" Background="#FFFFEEEE" VerticalAlignment="Top"/>
         <Button x:Name="orderbutton" Content="確定訂購" HorizontalAlignment="Left" Margin="640,24,0,0" VerticalAlignment="Top" Height="40" Width="80" FontSize="16" Click="orderbutton_Click"/>
-        <TextBlock x:Name="TextBlock1" HorizontalAlignment="Left" Margin="40,290,0,0" TextWrapping="Wrap" RenderTransformOrigin="-0.314,0.444" Width="560" Background="#FFFFE5C5" FontSize="20" Height="200" VerticalAlignment="Top"/>
+        <TextBlock x:Name="displayTextBlock" HorizontalAlignment="Left" Margin="40,290,0,0" TextWrapping="Wrap" RenderTransformOrigin="-0.314,0.444" Width="560" Background="#FFFFE5C5" FontSize="20" Height="200" VerticalAlignment="Top" Padding="10,10,10,10"/>
         <GroupBox Header="內用外帶" Margin="40,0,0,0" Background="#FFD2E5FF" Width="560" FontSize="16" HorizontalAlignment="Left" Height="65" VerticalAlignment="Top">
             <StackPanel  Orientation="Horizontal" Height="39" Margin="0,0,90,0">
                 <RadioButton Content="內用" IsChecked="True" FontSize="18" VerticalContentAlignment="Center" Click="RadioButton_Click" Width="100" Height="40"/>
