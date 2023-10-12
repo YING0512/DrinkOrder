@@ -67,7 +67,6 @@ namespace WpfApp1
                     Foreground = Brushes.Red
                 };
 
-
                 sp.Children.Add(cb);
                 sp.Children.Add(sl);
                 sp.Children.Add(lb);
@@ -144,10 +143,8 @@ namespace WpfApp1
             displayTextBlock.Inlines.Add(takeoutString);
             displayTextBlock.Inlines.Add(new Run() { Text = "，訂購明細如下: \n", FontSize = 16 });
 
-
             double total = 0.0;
             double sellprice = 0.0;
-            //string displayString = "訂購清單如下:\n";
             string discountString = "";
             int i = 1;
 
@@ -262,7 +259,6 @@ namespace WpfApp1
             SaveOrderToTextFile(orders);
         }
 
-
         private void SaveOrderToTextFile(Dictionary<string, int> myorders)
         {
             if (displayTextBlock.Text.Length > 0)
@@ -282,19 +278,5 @@ namespace WpfApp1
                 MessageBox.Show("訂單尚未生成");
             }
         }
-
-        private double CalculateTotalPrice(Dictionary<string, int> myorders)
-        {
-            double total = 0.0;
-            foreach (var item in myorders)
-            {
-                string drinkName = item.Key;
-                int quantity = item.Value;
-                int price = drinks[drinkName];
-                total += price * quantity;
-            }
-            return total;
-        }
-
     }
 }
