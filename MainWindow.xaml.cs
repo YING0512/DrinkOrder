@@ -153,34 +153,73 @@ namespace WpfApp1
                 //displayString += $"{drinkName} X {quantity}杯，每杯{price}元，總共{price * quantity}元\n";
             }
 
+            Italic summaString1 = new Italic(new Run
+            {
+                Text = $"本次訂購總共{myorders.Count}項，",
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Red
+            });
+             
+            Run summaString2 = new Run();
             if (total >= 500)
             {
                 discountString = "訂購滿500以上者打8折";
                 sellprice = total * 0.8;
+                summaString2.Text = $"{discountString}";
+                summaString2.FontSize = 16;
+                summaString2.FontWeight = FontWeights.Bold;
+                summaString2.Foreground = Brushes.Blue;
             }
             else if (total >= 300)
             {
                 discountString = "訂購滿300以上著打85折";
                 sellprice = total * 0.85;
+                summaString2.Text = $"{discountString}";
+                summaString2.FontSize = 16;
+                summaString2.FontWeight = FontWeights.Bold;
+                summaString2.Foreground = Brushes.Yellow;
             }
             else if (total >= 200)
             {
                 discountString = "訂購滿200以上者打9折";
                 sellprice = total * 0.9;
+                summaString2.Text = $"{discountString}";
+                summaString2.FontSize = 16;
+                summaString2.FontWeight = FontWeights.Bold;
+                summaString2.Foreground = Brushes.Green;
             }
             else
             {
                 discountString = "訂購未滿200以上者不打折";
                 sellprice = total;
+                summaString2.Text = $"{discountString}";
+                summaString2.FontSize = 16;
+                summaString2.FontWeight = FontWeights.Bold;
+                summaString2.Foreground = Brushes.Black;
             }
-            Italic summaString = new Italic( new Run
+
+            Italic summaString3 = new Italic(new Run
             {
-                Text = $"本次訂購總共{myorders.Count}項，{discountString}，售價{sellprice}元",
+                Text = $"，售價{sellprice}元",
                 FontSize = 16,
                 FontWeight = FontWeights.Bold,
-                Foreground =Brushes.Red
+                Foreground = Brushes.Red
             });
-            displayTextBlock.Inlines.Add(summaString);
+            
+            //Italic summaString = new Italic( new Run
+            //{
+            //    Text = $"本次訂購總共{myorders.Count}項，{discountString}，售價{sellprice}元",
+            //    FontSize = 16,
+            //    FontWeight = FontWeights.Bold,
+            //    Foreground =Brushes.Red
+            //});
+
+            
+
+            displayTextBlock.Inlines.Add(summaString1);
+            displayTextBlock.Inlines.Add(summaString2);
+            displayTextBlock.Inlines.Add(summaString3);
             //displayString += $"";
             //displayTextBlock.Text = displayString;
 
@@ -210,5 +249,71 @@ namespace WpfApp1
             if (rb.IsChecked == true) takeout = rb.Content.ToString();
             MessageBox.Show (takeout);
         }
+
+        //輸出訂單
+        private void SaveOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 將訂單信息保存到.txt檔案
+            SaveOrderToTextFile(orders);
+        }
+
+
+        private void SaveOrderToTextFile(Dictionary<string, int> myorders)
+        {
+            string fileName = "Order.txt"; // 指定.txt檔案的名稱
+
+            using (StreamWriter writer = new StreamWriter(fileName))
+            {
+                writer.WriteLine("您所訂購的飲品為:");
+                writer.WriteLine(takeout);
+                writer.WriteLine("訂購明細如下:");
+
+                foreach (var item in myorders)
+                {
+                    string drinkName = item.Key;
+                    int quantity = item.Value;
+                    int price = drinks[drinkName];
+                    writer.WriteLine($"飲料品項: {drinkName}, 數量: {quantity}杯, 每杯價格: {price}元, 總價: {price * quantity}元");
+                }
+
+                double total = CalculateTotalPrice(myorders);
+                writer.WriteLine($"總價: {total}元");
+
+                if (total >= 500)
+                {
+                    writer.WriteLine("訂購滿500以上者打8折");
+                    writer.WriteLine($"折扣後售價: {total * 0.8}元");
+                }
+                else if (total >= 300)
+                {
+                    writer.WriteLine("訂購滿300以上者打85折");
+                    writer.WriteLine($"折扣後售價: {total * 0.85}元");
+                }
+                else if (total >= 200)
+                {
+                    writer.WriteLine("訂購滿200以上者打9折");
+                    writer.WriteLine($"折扣後售價: {total * 0.9}元");
+                }
+                else
+                {
+                    writer.WriteLine("訂購未滿200以上者不打折");
+                    writer.WriteLine($"售價: {total}元");
+                }
+            }
+        }
+
+        private double CalculateTotalPrice(Dictionary<string, int> myorders)
+        {
+            double total = 0.0;
+            foreach (var item in myorders)
+            {
+                string drinkName = item.Key;
+                int quantity = item.Value;
+                int price = drinks[drinkName];
+                total += price * quantity;
+            }
+            return total;
+        }
+
     }
 }
